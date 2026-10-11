@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,7 +14,7 @@ import Toast from "../components/Toast";
 
 import { useSearch } from "../context/SearchContext";
 import { validateBooking } from "../utils/validation";
-import { generatePNR, saveBooking } from "../utils/bookingUtils";
+import { generatePNR } from "../utils/bookingUtils";
 
 export default function Booking() {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ export default function Booking() {
 
     setToast({
       type: "info",
-      title: "Confirming your booking",
+      title: "Proceeding to payment",
       message: "Please wait...",
     });
 
@@ -101,15 +102,13 @@ export default function Booking() {
         ...form,
         pnr,
         train: selectedTrain,
-        status: "CONFIRMED",
+        status: "PENDING_PAYMENT",
         bookedAt: new Date().toISOString(),
       };
 
-      saveBooking(booking);
-
       setProcessing(false);
 
-      navigate("/booking-success", {
+      navigate("/payment", {
         state: { booking },
       });
     }, 1200);
@@ -311,10 +310,10 @@ export default function Booking() {
                   {processing ? (
                     <>
                       <span className="spinner" />
-                      Confirming Booking...
+                      Proceeding to Payment...
                     </>
                   ) : (
-                    "Confirm Booking"
+                    "Continue to Payment"
                   )}
                 </button>
               </form>
